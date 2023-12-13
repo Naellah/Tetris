@@ -73,9 +73,9 @@ public class Rotation {
                 else
                 {
                     p.setCases(new int[][] {{0,0,0,0},
-                                            {1,0,0,0},
-                                            {1,1,0,0},
-                                            {1,0,0,0}});
+                                            {0,1,0,0},
+                                            {0,1,1,0},
+                                            {0,1,0,0}});
                     p.setrotationnb(1);
                     break;
                 }
@@ -182,18 +182,18 @@ public class Rotation {
                     
                 {
                     p.setCases(new int[][] {{0,0,0,0},
-                                            {0,0,0,0},
                                             {0,0,1,0},
-                                            {1,1,1,0}});
+                                            {1,1,1,0},
+                                            {0,0,0,0}});
                     p.setrotationnb(4);
                     break;
                 }
                 else
                 {
                     p.setCases(new int[][] {{0,0,0,0},
-                                            {1,0,0,0},
-                                            {1,0,0,0},
-                                            {1,1,0,0}});
+                                            {0,1,0,0},
+                                            {0,1,0,0},
+                                            {0,1,1,0}});
                     p.setrotationnb(1);
                     break;
                 }  

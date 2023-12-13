@@ -1,6 +1,10 @@
 package Modele;
 
 import java.awt.*;
+
+
+
+
 public class Couleur {
 
    private Grille g;

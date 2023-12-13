@@ -18,7 +18,6 @@ public class VC extends JFrame implements Observer {
     
     Observer vueGrille;
     private Executor ex =  Executors.newSingleThreadExecutor();
-    private VuePause vuePause;
 
     public VC(Grille _modele) {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -55,7 +54,7 @@ public class VC extends JFrame implements Observer {
 
         KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         manager.addKeyEventDispatcher(new KeyEventDispatcher() {
-
+            //action des touches du clavier
             @Override
             public boolean dispatchKeyEvent(KeyEvent e) {
                 switch (e.getID()) {
@@ -87,15 +86,82 @@ public class VC extends JFrame implements Observer {
             @Override
             public void mouseClicked(MouseEvent e) {
                 // Si le clic de souris est sur l'image du bouton pause
-                // utilise  les coordonnées de g.drawImage(PauseImage.getImage(),xOffset+430 , yOffset+520, 80, 80, this);
+
                 if (e.getX() >= xOffset+430 && e.getX() <= xOffset+430+80 && e.getY() >= yOffset+520 && e.getY() <= yOffset+520+80) {
                     System.out.println("Pause");
+                    
                     if (modele.getOrdonnanceur().isPaused()) {
                         modele.resumeOrdonnanceur();
+                        modele.setPause();
                     } else {
-                        modele.pauseOrdonnanceur();
+                        
+                        modele.setPause();
+                        // exécution de la pause avec un léger délai pour afficher la pause 
+                        // avant que le thread ne soit mis en pause
+                        ex.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    Thread.sleep(500);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                modele.pauseOrdonnanceur();
+                            }
+                        });
+                        
+                       
                     }
                 }
+
+                
+                /* gère les cliques pour ces images si le mode pause est activé
+                */
+                if (modele.getPause()) {
+                    if (e.getX() >= xOffset+105 && e.getX() <= xOffset+105+225 && e.getY() >= yOffset+140 && e.getY() <= yOffset+140+90) {
+                        System.out.println("Reprendre");
+                        modele.resumeOrdonnanceur();
+                        modele.setPause();
+                    }
+                    if (e.getX() >= xOffset+105 && e.getX() <= xOffset+105+225 && e.getY() >= yOffset+250 && e.getY() <= yOffset+250+90) {
+                        System.out.println("Recommencer");
+                        modele.recommencer();
+                        modele.resumeOrdonnanceur();
+                        modele.setPause();
+                    }
+                    if (e.getX() >= xOffset+105 && e.getX() <= xOffset+105+225 && e.getY() >= yOffset+360 && e.getY() <= yOffset+360+90) {
+                        System.out.println("Quitter");
+                        System.exit(0);
+                    }
+                }
+                
+                if(modele.getJeuCommence() == false){
+                    
+                    if (e.getX() >= xOffset+105 && e.getX() <= xOffset+105+225 && e.getY() >= yOffset+140 && e.getY() <= yOffset+140+90){
+                        System.out.println("Jouer");
+                        modele.setJeuCommence();
+                        ex.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    Thread.sleep(700);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                modele.getOrdonnanceur().start();
+                            }
+                        });
+                        
+                    }
+
+                    if (e.getX() >= xOffset+105 && e.getX() <= xOffset+105+225 && e.getY() >= yOffset+360 && e.getY() <= yOffset+360+90) {
+                        System.out.println("Quitter");
+                        System.exit(0);
+                    }
+                }
+
+                
+               
             }
         });
 
@@ -117,12 +183,7 @@ public class VC extends JFrame implements Observer {
             jt.setText("Elapsed time : " + (System.currentTimeMillis() - lastTime) + "ms - x = " + modele.getPieceCourante().getx() + " y = " + modele.getPieceCourante().gety());
             lastTime = System.currentTimeMillis();
 
-            if (modele.getOrdonnanceur().isPaused()) {
-                vuePause.drawPauseInterface(getGraphics());
-                
-                // Assurez-vous que le dessin est visible en appelant repaint
-                repaint();
-            }
+            
         });
     }
 

@@ -14,6 +14,7 @@ public class Piece {
     private int rotation_nombre = 0;
     private Collision c;
     private Rotation r;
+    private boolean est_mystere = false;
     
 
     public Piece(TypePiece type, Grille _grille) {
@@ -70,7 +71,7 @@ public class Piece {
         
             case L:
                 this.cases = new int[][] {{0,0,0,0},
-                                        {1,1,0,0},
+                                        {0,1,1,0},
                                         {0,1,0,0},
                                         {0,1,0,0}};
                 this.type = TypePiece.L;
@@ -89,6 +90,14 @@ public class Piece {
                 
                 break;
         }
+
+        int mystere = Tool.monRandom(0, 4);
+        if(mystere == 1)
+            this.est_mystere = true;
+        else
+            this.est_mystere = false;
+
+        
         
     }
 
@@ -109,7 +118,7 @@ public class Piece {
                         ind = 1;
                 break;
 
-            case L: if(getrotationnb() == 4)
+            case L: if(getrotationnb() == 4 || getrotationnb() == 2)
                         ind = 1;
                 break;
             
@@ -152,7 +161,7 @@ public class Piece {
                         ind = 4;
                 break;
 
-            case L: 
+            case L: if(getrotationnb() == 3 ||getrotationnb() == 1)
                     ind = 4;
                 break;
 
@@ -179,6 +188,14 @@ public class Piece {
             dY = 2;
     }
 
+
+    public boolean verifdescente()
+    {
+        if(grille.getCollision().CollisionBas(x, y-4))
+            return false;
+        return true;
+    }
+
     public void action_rotation(){
         System.out.println("rotation");
         
@@ -196,10 +213,14 @@ public class Piece {
         {
             y = nextY;
             x = nextX;
-            //System.out.println("test");
+            if(getDy() == 2 && verifdescente())
+            {
+                setDy(1);
+            
+            }    
         } else {
             dY = 0;
-            devientMorte();
+            
            
         }
     }
@@ -270,6 +291,25 @@ public class Piece {
     public void devientMorte()
     {
         this.vivante = false;
+    }
+
+    public boolean getEst_mystere()
+    {
+        return this.est_mystere;
+    }
+
+    public void setEst_mystere(boolean b)
+    {
+        this.est_mystere = b;
+    }
+
+    public int getDy()
+    {
+        return this.dY;
+    }
+    public void setDy(int dy)
+    {
+        this.dY = dy;
     }
    
 }
