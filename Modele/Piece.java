@@ -184,14 +184,14 @@ public class Piece {
 
     public void action_descente()
     {
-        if(grille.validationPosition(x, y-2) )
+        if(grille.validationPosition(x, y+1) )
             dY = 2;
     }
 
 
     public boolean verifdescente()
     {
-        if(grille.getCollision().CollisionBas(x, y-4))
+        if(grille.getCollision().CollisionBas(x, y+1))
             return false;
         return true;
     }

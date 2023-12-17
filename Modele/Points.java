@@ -39,8 +39,14 @@ public class Points {
         this.score_tempo = _score_tempo;
     }
 
+     public void addScoreTempo(int _score)
+    {
+        this.score_tempo += _score;
+    }
+
     public void ajoutePoint(){
         int s= grille.descendLigne();
         addScore(s*150);
+        addScoreTempo(s*150);
     }
 }

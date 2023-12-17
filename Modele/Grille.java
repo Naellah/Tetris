@@ -145,7 +145,7 @@ public class Grille extends Observable implements Runnable {
     public int verifUneLigne(int y)
     {
         int ind = 0;
-        for(int i =2; i< TAILLE_X; i++)
+        for(int i =0; i< TAILLE_X; i++)
         {
             if(getGrille(i, y) ==2)
             {
@@ -197,7 +197,7 @@ public class Grille extends Observable implements Runnable {
             {
                 setGrille(j, h+1, getGrille(j, h-1));
                 setGrilleCoCase(j, h+1, getGrilleCoCase(j, h));
-                
+                setGrille(j, h, 0);
                 setGrilleCoCase(j, h, enumCouleur.NOIR);
             }
             h--;    
